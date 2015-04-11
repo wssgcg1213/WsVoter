@@ -3,16 +3,19 @@
  */
 console.log('load user.js');
 
-var socket = io(location.origin, { path : "/wsvoter/sio" });
-//var socket = io("http://localhost:3000/wsvoter/sio/my");
-socket.on('connect', init);
+var socket = io(location.origin + '/user', { path : "/wsvoter/sio" });
 
-function init(){
-    socket.emit('reg', {
-        type: 'voter'
-    });
-    socket.emit('query');
-}
+socket.on('connect', function() {
+    var uniqueid = getCookie("voter") || (function(){
+            var id = createUniqueId(20);
+            setCookie("voter", id);
+            return id;
+        })();
+
+    socket.emit('reg', uniqueid);
+    console.log('连上去了');
+});
+
 
 /**
  * 接收到die指令的时候 断开连接
@@ -28,17 +31,56 @@ socket.on('disconnect', function(){
     console.log('died');
 })
 
-function ling(i){return document.querySelector(i);}
-ling('#btn').addEventListener('click', function(){
-    socket.emit('vote', {id: 1});
-}, false);
-
 socket.on('voteReturn', function(obj) {
-   if(obj && typeof obj.num == 'number'){
-       ling('#nowVoteNum').innerHTML = obj.num;
-   }
+   console.log('voteReturn', obj);
 });
 socket.on('queryReturn', function(obj) {
-    ling('#nowVoteNum').innerHTML = obj.vote;
-    console.log('voterCount:', obj.voterCount);
+    console.log('queryReturn:', obj);
 });
+socket.on('init', function(obj) {
+    console.log('init:', obj);
+});
+
+/**
+ * 创建唯一的识别码
+ * @param n 位数 默认10
+ * @returns {string}
+ */
+function createUniqueId(n){
+    n = n || 10;
+    var id = '';
+    for(var i = 0; i < n; i++)
+        id += Math.floor(Math.random() * 10);
+    return id;
+}
+function getCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');    //把cookie分割成组
+    for(var i=0;i < ca.length;i++) {
+        var c = ca[i];                      //取得字符串
+        while (c.charAt(0)==' ') {          //判断一下字符串有没有前导空格
+            c = c.substring(1,c.length);      //有的话，从第二位开始取
+        }
+        if (c.indexOf(nameEQ) == 0) {       //如果含有我们要的name
+            return unescape(c.substring(nameEQ.length,c.length));    //解码并截取我们要值
+        }
+    }
+    return false;
+}
+
+//清除cookie
+function clearCookie(name) {
+    setCookie(name, "", -1);
+}
+
+//设置cookie
+function setCookie(name, value, seconds) {
+    seconds = seconds || 0;   //seconds有值就直接赋值，没有为0，这个根php不一样。
+    var expires = "";
+    if (seconds != 0 ) {      //设置cookie生存时间
+        var date = new Date();
+        date.setTime(date.getTime()+(seconds*1000));
+        expires = "; expires="+date.toGMTString();
+    }
+    document.cookie = name+"="+escape(value)+expires+"; path=/";   //转码并赋值
+}

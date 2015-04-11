@@ -3,15 +3,46 @@
  */
 console.log('load screen.js');
 
-//var socket = io(location.origin, { path : "/wsvoter/sio" });
-
+var socket = io(location.origin + '/screen', { path : "/wsvoter/sio" });
 var initBottom = 10,
-    initHeight = 4,
-    maxInc = 138;
+    initHeight = 4;
+var $vote = $('.vote');
+//var initBottom = 10,
+//    initHeight = 4,
+//    maxInc = 138;
+var initTimer = 0;
+socket.on('connect', function() {
+    console.log('连上服务器了');
+    initTimer = setInterval(function() {
+        socket.emit('query');
+        console.log('emit query');
+    }, 2000);
+    socket.on('init', queryHandler);
+    socket.on('queryReturn', queryHandler);
+});
+function queryHandler(voters) {
+    clearInterval(initTimer);
+    console.log('init/query:', voters);
+    if(voters.forEach)
+        voters.forEach(function(v) {
+            var $v = $vote.filter('[data-vote="' + v.id + '"]'),
+                inc = parseInt(0.345 * v.voteNumber) || 0;
+            inc = inc >= 138 ? 138 : inc;
+            $v.find('.vote-number').text(v.voteNumber + '票');
+            $v.find('.vote-top').css('bottom', initBottom + inc +'px');
+            $v.find('.vote-bottom').css('height', initHeight + inc +'px');
+        });
+}
+//document.ready
+//400票为100% -> 138px
+//1票对应 0.25% -> 0.345px
+$(function() {
 
-var inc = 0;
-$(document).click(function(){
-    inc++;
-    $('.vote').find('.vote-top').css('bottom', initBottom + inc +'px');
-    $('.vote').find('.vote-bottom').css('height', initHeight + inc +'px');
+    $vote.each(function(i, v) {
+        var $v = $(v),
+            initNumber = parseInt($v.find('.vote-number').text()) * 0.345 || 0;
+        initNumber = initNumber >= 138 ? 138 : initNumber;
+        $v.find('.vote-top').css('bottom', initBottom + initNumber +'px');
+        $v.find('.vote-bottom').css('height', initHeight + initNumber +'px');
+    });
 });

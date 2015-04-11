@@ -453,6 +453,9 @@ body {
   position: relative;
   height: 100%;
 }
+body {
+  overflow: hidden;
+}
 .contaniner {
   margin: 0 auto;
   width: 100%;
@@ -462,14 +465,15 @@ body {
   background-size: cover;
 }
 .contaniner h1 {
-  position: relative;
-  top: 20px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 20%;
+  width: 80%;
   margin: 0 auto;
-  width: 945px;
   background-image: url(../img/title.png);
   background-repeat: no-repeat;
   background-size: contain;
-  height: 180px;
   font-size: 0;
 }
 .contaniner ul,
@@ -479,10 +483,12 @@ body {
   padding: 0;
 }
 .contaniner .voters {
-  width: 90%;
-  position: relative;
-  top: 70px;
+  position: absolute;
+  height: 80%;
   margin: 20px auto 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   *zoom: 1;
 }
 .contaniner .voters:before,
@@ -496,7 +502,16 @@ body {
 .contaniner .vote {
   float: left;
   width: 16.66666667%;
-  margin-bottom: 30px;
+  height: 50%;
+}
+.contaniner .vote .vote-avatar {
+  width: 58px;
+  height: 58px;
+  overflow: hidden;
+  background-position: center;
+  background-size: contain;
+  border-radius: 50%;
+  margin: 0 auto 10px;
 }
 .contaniner .vote .vote-container {
   text-indent: -9999px;
@@ -519,6 +534,8 @@ body {
   height: 16px;
   margin: 0 auto;
   bottom: 10px;
+  -webkit-transition: bottom 250ms ease;
+          transition: bottom 250ms ease;
 }
 .contaniner .vote .vote-top.red {
   text-indent: -9999px;
@@ -545,6 +562,8 @@ body {
   left: 3px;
   bottom: 6px;
   height: 4px;
+  -webkit-transition: height 250ms ease;
+          transition: height 250ms ease;
   border-radius: 0 0 5px 5px;
 }
 .contaniner .vote .vote-bottom.red {
@@ -559,9 +578,15 @@ body {
   text-align: left;
   background: url(../img/blue.png) no-repeat 0 0;
 }
+.contaniner .vote .vote-number {
+  text-align: center;
+  color: #FFF;
+  margin: 5px 0 10px;
+  font-size: 18px;
+}
 .contaniner .vote .vote-name {
   text-align: center;
   color: #FFF;
-  margin: 20px 0 40px;
+  margin: 10px 0 40px;
   font-size: 18px;
 }
