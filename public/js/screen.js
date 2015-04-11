@@ -11,7 +11,11 @@ var $vote = $('.vote');
 //    initHeight = 4,
 //    maxInc = 138;
 var initTimer = 0;
+var connected = false;
 socket.on('connect', function() {
+    if(connected) return console.log('重新连上服务器了!');
+    connected = true;
+
     console.log('连上服务器了');
     initTimer = setInterval(function() {
         socket.emit('query');

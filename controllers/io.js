@@ -1,81 +1,31 @@
 /**
  * Created by Liuchenling on 4/7/15.
  */
-var EventProxy = require('eventproxy');
+var candidates = require('../models/candidates');
+var util = require("util");
+var events = require("events");
 
-var votersMock = [{
-    id: 1,
-    name: "王尼玛",
-    voteNumber: 123,
-    sex: 'female',
-    description: "尼玛县，位于西藏自治区的中部、那曲地区西北部，县人民政府驻尼玛镇。总面积72499.41平方千米。总人口4万人（2003年）。辖1个镇、13个乡，77个行政村。2009年底总人口为27375人，下辖1个镇、13个乡，77个行政村。尼玛县经济以牧业为主，特..."
-}, {
-    id: 2,
-    name: "啥啥啥",
-    voteNumber: 290,
-    sex: 'male',
-    description: "222，位于西藏自治区的中部、那曲地区西北部，县人民政府驻尼玛镇。总面积72499.41平方千米。总人口4万人（2003年）。辖1个镇、13个乡，77个行政村。2009年底总人口为27375人，下辖1个镇、13个乡，77个行政村。尼玛县经济以牧业为主，特..."
-}, {
-    id: 3,
-    name: "对对对",
-    voteNumber: 346,
-    sex: 'female',
-    description: "333，位于西藏自治区的中部、那曲地区西北部，县人民政府驻尼玛镇。总面积72499.41平方千米。总人口4万人（2003年）。辖1个镇、13个乡，77个行政村。2009年底总人口为27375人，下辖1个镇、13个乡，77个行政村。尼玛县经济以牧业为主，特..."
-}, {
-    id: 4,
-    name: "飞飞飞",
-    voteNumber: 666,
-    sex: 'male',
-    description: "444，位于西藏自治区的中部、那曲地区西北部，县人民政府驻尼玛镇。总面积72499.41平方千米。总人口4万人（2003年）。辖1个镇、13个乡，77个行政村。2009年底总人口为27375人，下辖1个镇、13个乡，77个行政村。尼玛县经济以牧业为主，特..."
-},{
-    id: 5,
-    name: "王尼玛",
-    voteNumber: 190,
-    sex: 'male',
-    description: "尼玛县，位于西藏自治区的中部、那曲地区西北部，县人民政府驻尼玛镇。总面积72499.41平方千米。总人口4万人（2003年）。辖1个镇、13个乡，77个行政村。2009年底总人口为27375人，下辖1个镇、13个乡，77个行政村。尼玛县经济以牧业为主，特..."
-}, {
-    id: 6,
-    name: "啥啥啥",
-    voteNumber: 333,
-    sex: 'female',
-    description: "222，位于西藏自治区的中部、那曲地区西北部，县人民政府驻尼玛镇。总面积72499.41平方千米。总人口4万人（2003年）。辖1个镇、13个乡，77个行政村。2009年底总人口为27375人，下辖1个镇、13个乡，77个行政村。尼玛县经济以牧业为主，特..."
-}, {
-    id: 7,
-    name: "对对对",
-    voteNumber: 99,
-    sex: 'male',
-    description: "333，位于西藏自治区的中部、那曲地区西北部，县人民政府驻尼玛镇。总面积72499.41平方千米。总人口4万人（2003年）。辖1个镇、13个乡，77个行政村。2009年底总人口为27375人，下辖1个镇、13个乡，77个行政村。尼玛县经济以牧业为主，特..."
-}, {
-    id: 8,
-    name: "飞飞飞",
-    voteNumber: 24,
-    sex: 'male',
-    description: "444，位于西藏自治区的中部、那曲地区西北部，县人民政府驻尼玛镇。总面积72499.41平方千米。总人口4万人（2003年）。辖1个镇、13个乡，77个行政村。2009年底总人口为27375人，下辖1个镇、13个乡，77个行政村。尼玛县经济以牧业为主，特..."
-},{
-    id: 9,
-    name: "王尼玛",
-    voteNumber: 123,
-    sex: 'male',
-    description: "尼玛县，位于西藏自治区的中部、那曲地区西北部，县人民政府驻尼玛镇。总面积72499.41平方千米。总人口4万人（2003年）。辖1个镇、13个乡，77个行政村。2009年底总人口为27375人，下辖1个镇、13个乡，77个行政村。尼玛县经济以牧业为主，特..."
-}, {
-    id: 10,
-    name: "啥啥啥",
-    voteNumber: 157,
-    sex: 'female',
-    description: "222，位于西藏自治区的中部、那曲地区西北部，县人民政府驻尼玛镇。总面积72499.41平方千米。总人口4万人（2003年）。辖1个镇、13个乡，77个行政村。2009年底总人口为27375人，下辖1个镇、13个乡，77个行政村。尼玛县经济以牧业为主，特..."
-}, {
-    id: 11,
-    name: "对对对",
-    voteNumber: 123,
-    sex: 'male',
-    description: "333，位于西藏自治区的中部、那曲地区西北部，县人民政府驻尼玛镇。总面积72499.41平方千米。总人口4万人（2003年）。辖1个镇、13个乡，77个行政村。2009年底总人口为27375人，下辖1个镇、13个乡，77个行政村。尼玛县经济以牧业为主，特..."
-}, {
-    id: 12,
-    name: "飞飞飞",
-    voteNumber: 555,
-    sex: 'female',
-    description: "444，位于西藏自治区的中部、那曲地区西北部，县人民政府驻尼玛镇。总面积72499.41平方千米。总人口4万人（2003年）。辖1个镇、13个乡，77个行政村。2009年底总人口为27375人，下辖1个镇、13个乡，77个行政村。尼玛县经济以牧业为主，特..."
-}];
+//生成cache器
+var candidatesObj = (function() {
+    function CachedVoteNotify(id, max) {
+        this.id = id;
+        this.n = 0;
+        this.max = max || 5; //default to 5
+        events.EventEmitter.call(this);
+    }
+    util.inherits(CachedVoteNotify, events.EventEmitter);//使这个类继承EventEmitter
+    CachedVoteNotify.prototype.vote = function (fn) {
+        if (++this.n >= this.max) {
+            fn && fn();
+            this.n = 0;
+        }
+    };
+    var candidatesObj = {};
+    candidates.forEach(function (c) {
+        candidatesObj['no' + c.id] = new CachedVoteNotify(c.id);
+    });
+    return candidatesObj;
+})();
 
 module.exports = function (io){
     var screen = io.of('/screen'),
@@ -84,22 +34,24 @@ module.exports = function (io){
     //todo 以下screen部分
     screen.on('connect', function(socket) {
         console.log('screen connected!');
-        socket.emit('init', votersMock);
+        socket.emit('init', candidates);
         socket.on('query', function() {
-            socket.emit('queryReturn', votersMock);
+            socket.emit('queryReturn', candidates);
         });
     });
 
 
     //todo 以下用户部分
     user.on('connection', function(socket) {
-        socket.emit('init', votersMock);
-        socket.on('vote', function(id) {
-            if(votersMock.indexOf(id) === -1){
-
-            }else{
-                socket.emit('die', '已经投过票了!');
-            }
+        socket.emit('init', candidates);
+        socket.on('vote', function(obj) {
+            var candidateId = obj.voteId,
+                uniqueid = obj.uniqueid;
+            if(!candidateId || !uniqueid) return console.log('没有candidateId或uniqueid');
+            //todo if(candidates[candidateId]['votedUniqueIds'].indexOf(uniqueid) > -1) return console.log('这个人已经投过了');
+            candidatesObj['no' + candidateId].vote(function() {
+                screen.emit('queryReturn', candidates); //五次投票之后刷新大屏幕
+            });
         });
     });
 

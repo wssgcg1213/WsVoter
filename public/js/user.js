@@ -5,15 +5,38 @@ console.log('load user.js');
 
 var socket = io(location.origin + '/user', { path : "/wsvoter/sio" });
 
+var connected = false;
 socket.on('connect', function() {
+    if(connected) return console.log('再次连接上');
+    connected = true;
+    console.log('连上去了');
+
     var uniqueid = getCookie("voter") || (function(){
             var id = createUniqueId(20);
             setCookie("voter", id);
             return id;
-        })();
+        })();//创建用户识别码 存COOKIE
 
-    socket.emit('reg', uniqueid);
-    console.log('连上去了');
+    var voteCount = 0; //已经投过的计数
+    $('.vote-btn').on('click', btnHandler);
+    function btnHandler(e){
+        var $this = $(this);
+        var id = $this.parents('li').data('id');
+        console.log('id', id);
+        $this.find('.love').html('&#xe62f;');
+        $this.find('span').text('已投!');
+        var $num = $this.parent().find('.vote-number')
+        var preCount = parseInt($num.text()) || 0;
+        $num.text(++preCount + '票');
+        voteCount++;
+
+        socket.emit('vote', {
+            voteId: id, //识别candidate
+            uniqueid: uniqueid //识别投票者
+        });
+
+        //todo $(this).off('click', btnHandler);
+    }
 });
 
 
@@ -40,6 +63,8 @@ socket.on('queryReturn', function(obj) {
 socket.on('init', function(obj) {
     console.log('init:', obj);
 });
+
+
 
 /**
  * 创建唯一的识别码

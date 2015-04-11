@@ -2,17 +2,35 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><%=title%></title>
+    <link rel="stylesheet" href="style/user.css"/>
 </head>
 <body>
-<div class="wrapper">
-    我的当前票数是
-    <span id="nowVoteNum">0</span>
+<div class="container">
+    <img class="top" src="img/usertop.png"/>
+    <ul>
+        <% candidates.forEach(function(v){%>
+            <li data-id="<%=v.id%>">
+                <div class="c-top">
+                    <img class="avatar" src="<%=v.avatar%>"/>
+                    <h3><%=v.name%></h3>
+                    <p><%=v.description%></p>
+                </div>
+                <div class="c-bottom">
+                    <div class="vote-number"><%=v.voteNumber%>票</div>
+                    <div class="vote-btn">
+                        <i class="love">&#xe602;</i>
+                        <span>投他一票</span>
+                    </div>
+                </div>
+            </li>
+        <%});%>
+    </ul>
 </div>
-<button id="btn">
-    点我投票啊
-</button>
+
 <script src="./sio/socket.io.js"></script>
+<script src="js/zepto-1.1.4.min.js"></script>
 <script src="js/user.js"></script>
 </body>
 </html>

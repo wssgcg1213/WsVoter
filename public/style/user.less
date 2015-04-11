@@ -1,0 +1,86 @@
+.global-normalize();
+
+html, body, .container{
+  width: 100%;
+}
+
+
+@font-face {font-family: "love";
+  src: url('../style/love.eot'); /* IE9*/
+  src: url('../style/love.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('../style/love.woff') format('woff'), /* chrome、firefox */
+  url('../style/love.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+  url('../style/love.svg#iconfont') format('svg'); /* iOS 4.1- */
+}
+
+.love {
+  font-family:"love" !important;
+  font-size:16px;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: 0.2px;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.container{
+  background-color: rgb(239, 239, 239);
+  .top{
+    width: 100%;
+  }
+}
+ul, li{
+  margin: 0;
+  padding: 0;
+  .reset-list-style();
+}
+
+ul{
+  padding: 2%;
+}
+li{
+  width: 100%;
+  background-color: #FFFFFF;
+  margin-bottom: 2%;
+  border: 1px solid rgb(221, 221, 221);
+  border-radius: 3px;
+  color: rgb(102, 102, 102);
+  .c-top{
+    border-bottom: 1px solid rgb(221, 221, 221);
+    padding: 2.5%;
+    .clearfix();
+  }
+  .avatar{
+    width: 16%;
+    float: left;
+    margin-right: 2.5%;
+  }
+  h3{
+    color: #000;
+    margin: 0;
+    font-size: 20px;
+    font-weight: bold;
+  }
+  p{
+    text-indent: 0em;
+    font-size: 14px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .c-bottom{
+    .clearfix();
+    div{
+      float: left;
+      min-height: 40px;
+      line-height: 40px;
+      width: 50%;
+      text-align: center;
+    }
+    .vote-number{
+      box-sizing: border-box;
+      border-right: 1px solid rgb(221, 221, 221);
+    }
+  }
+  .love{
+    color: #F4747A;
+    font-size: 26px;
+  }
+}
