@@ -1,9 +1,11 @@
 var express = require('express');
-var path = require('path');
-var favicon = require('static-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+    path = require('path'),
+    favicon = require('static-favicon'),
+    logger = require('morgan');
+    cookieParser = require('cookie-parser'),
+    bodyParser = require('body-parser'),
+    uuid = require('uuid'),
+    session = require('express-session');
 
 
 var routes = require('./routes/index');
@@ -16,12 +18,20 @@ app.set('view engine', 'ejs');
 
 app.use(favicon());
 app.use(logger('dev'));
-app.use(bodyParser.json());
+//app.use(bodyParser.json()); //不需要json
 app.use(bodyParser.urlencoded());
-app.use(cookieParser());
-app.use('/wsvoter', express.static(path.join(__dirname, 'public')));
+app.use(cookieParser()); //解析cookie
+app.use(session({ //session中间件
+    genid: function(req) {
+        return uuid.v4() // UUID生成唯一识别码
+    },
+    resave: false,
+    saveUninitialized: true,
+    secret: 'ZeroLing' //sec
+}));
 
-app.use('/wsvoter', routes);
+app.use('/wsvoter', express.static(path.join(__dirname, 'public')));  //设置静态路径
+app.use('/wsvoter', routes); //路由
 
 /// catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -30,28 +40,19 @@ app.use(function(req, res, next) {
     next(err);
 });
 
-/// error handlers
-
-// development error handler
-// will print stacktrace
+/// 以下是报错
+//开发环境
 if (app.get('env') === 'development') {
     app.use(function(err, req, res, next) {
         res.status(err.status || 500);
-        res.render('error', {
-            message: err.message,
-            error: err
-        });
+        res.end('error' + err.message);
     });
 }
 
-// production error handler
-// no stacktraces leaked to user
+//线上环境报错
 app.use(function(err, req, res, next) {
     res.status(err.status || 500);
-    res.render('error', {
-        message: err.message,
-        error: {}
-    });
+    res.end('error' + err.message);
 });
 
 
