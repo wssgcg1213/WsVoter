@@ -1,7 +1,25 @@
 /**
  * Created by Liuchenling on 4/11/15.
  */
-var candidates = [{
+
+
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema,
+    ObjectId = Schema.ObjectId;
+
+var candidate = new Schema({
+    id: ObjectId,
+    name: String,
+    voteNumber: Number,
+    sex: String,
+    avatar: String,
+    description: String
+});
+var candidates = new Schema([candidate]);
+
+module.exports = mongoose.model('candidates', candidates);
+
+var tmp = [{
     id: 1,
     name: "王尼玛",
     voteNumber: 123,
@@ -87,4 +105,5 @@ var candidates = [{
     description: "444，位于西藏自治区的中部、那曲地区西北部，县人民政府驻尼玛镇。总面积72499.41平方千米。总人口4万人（2003年）。辖1个镇、13个乡，77个行政村。2009年底总人口为27375人，下辖1个镇、13个乡，77个行政村。尼玛县经济以牧业为主，特..."
 }];
 
-module.exports = candidates;
+
+

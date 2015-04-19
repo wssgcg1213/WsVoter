@@ -7,7 +7,7 @@ var candidates = require('../models/candidates');
 module.exports = function(req, res) {
 
     res.render('user', {
-        title: "this is title",
+        title: "投票",
         candidates: candidates
     });
 }

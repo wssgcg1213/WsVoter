@@ -5,8 +5,7 @@ var user = require('../controllers/user'),
     screen = require('../controllers/screen'),
     admin = require('../controllers/admin'),
     login = require('../controllers/login');
-
-/**
+    /**
  * 路由表
  */
 router.get('/', function(req, res) {

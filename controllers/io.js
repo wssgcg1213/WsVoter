@@ -21,10 +21,14 @@ var candidatesObj = (function() {
         }
     };
     var candidatesObj = {};
-    candidates.forEach(function (c) {
-        candidatesObj['no' + c.id] = new CachedVoteNotify(c.id);
+    candidates.find({}, function(err, res){
+        if(!err) {
+            res.forEach(function (c) {
+                candidatesObj['no' + c.id] = new CachedVoteNotify(c.id);
+            });
+        }
+        return candidatesObj;
     });
-    return candidatesObj;
 })();
 
 module.exports = function (io){

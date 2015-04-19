@@ -505,18 +505,22 @@ li .c-top:after {
   clear: both;
 }
 li .avatar {
-  width: 16%;
+  width: 20%;
   float: left;
-  margin-right: 2.5%;
+  margin-top: 5px;
 }
 li h3 {
   color: #000;
   margin: 0;
   font-size: 20px;
   font-weight: bold;
+  text-indent: 2.5%;
 }
 li p {
-  text-indent: 0em;
+  width: 77.5%;
+  padding-left: 2.5%;
+  float: right;
+  text-indent: 2em;
   font-size: 14px;
   -webkit-font-smoothing: antialiased;
 }
@@ -535,7 +539,7 @@ li .c-bottom div {
   float: left;
   min-height: 40px;
   line-height: 40px;
-  width: 50%;
+  width: 100%;
   text-align: center;
 }
 li .c-bottom .vote-number {
