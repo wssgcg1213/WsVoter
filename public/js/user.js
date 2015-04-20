@@ -21,8 +21,10 @@ socket.on('connect', function() {
     $('.vote-btn').on('click', btnHandler);
     function btnHandler(e){
         var $this = $(this);
-        var id = $this.parents('li').data('id');
-        console.log('id', id);
+        var name = $this.parents('li').data('name');
+        if($this.parents('li').data('voted')) return;
+        $this.parents('li').data('voted', 'yes');
+        console.log('name', name);
         $this.find('.love').html('&#xe62f;');
         $this.find('span').text('已投!');
         var $num = $this.parent().find('.vote-number')
@@ -31,7 +33,7 @@ socket.on('connect', function() {
         voteCount++;
 
         socket.emit('vote', {
-            voteId: id, //识别candidate
+            name: name, //识别candidate
             uniqueid: uniqueid //识别投票者
         });
 

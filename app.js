@@ -9,6 +9,8 @@ var express = require('express');
 
 
 var routes = require('./routes/index');
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://wssgcg1213:6884650@localhost:27017/wsvoter');
 
 var app = express();
 

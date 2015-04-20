@@ -29,7 +29,7 @@ function queryHandler(voters) {
     console.log('init/query:', voters);
     if(voters.forEach)
         voters.forEach(function(v) {
-            var $v = $vote.filter('[data-vote="' + v.id + '"]'),
+            var $v = $vote.filter('[data-vote="' + v.name + '"]'),
                 inc = parseInt(0.345 * v.voteNumber) || 0;
             inc = inc >= 138 ? 138 : inc;
             $v.find('.vote-number').text(v.voteNumber + '票');

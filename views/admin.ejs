@@ -7,7 +7,11 @@
     <title>实时投票后台管理系统</title>
     <!-- Bootstrap -->
     <link href="style/bootstrap.css" rel="stylesheet">
-
+    <style>
+        table img{
+            max-width: 56px;
+        }
+    </style>
     <!--[if lt IE 9]>
     <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
@@ -15,80 +19,136 @@
 </head>
 <body>
 <div class="container">
+
     <div class="row">
         <h1>实时投票后台管理系统</h1>
     </div>
+
+
+    <div class="row">
+        <form class="form-inline" id="adder" method="POST">
+            <div class="form-group">
+                <label class="sr-only">姓名</label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="姓名">
+            </div>
+            <div class="form-group">
+                <label class="sr-only">description</label>
+                <input type="text" class="form-control" row="3" id="description" name="description" placeholder="竞赛宣言">
+            </div>
+            <div class="form-group">
+                <label class="sr-only">ImgURL</label>
+                <input type="text" class="form-control" row="3" id="imgurl" name="imgurl" placeholder="图片地址">
+            </div>
+            <div class="form-group">
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="sex" value="male" checked>
+                        男
+                    </label>
+                </div>
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="sex" value="female">
+                        女
+                    </label>
+                </div>
+            </div>
+            <input type="hidden" name="type" value="addCpool"/>
+            <button type="submit" class="btn btn-default">添加到候选人池</button>
+        </form>
+    </div>
+
     <div class="row">
         <div class="panel panel-default">
-            <!-- Default panel contents -->
             <div class="panel-heading">候选人池</div>
-            <!--<div class="panel-body">-->
-                <!--<p>...</p>-->
-            <!--</div>-->
-            <!-- Table -->
             <table class="table table-bordered table-hover">
                 <tr>
                     <th>序号ID</th>
+                    <th>照片</th>
                     <th>姓名</th>
+                    <th>性别</th>
+                    <th>竞赛宣言</th>
                     <th>操作</th>
                 </tr>
+                <% cpool.forEach(function(c, n){%>
                 <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
+                    <th scope="row"><%= n+1 %></th>
+                    <td><img src="<%= c.avatar %>"/></td>
+                    <td><%=c.name%></td>
+                    <td><%=c.sex=="male"?"男":"女"%></td>
+                    <td><%=c.description%></td>
                     <td>
-                        <a class="btn btn-success" href="#" role="button">添加到正式候选人</a>
-                        <a class="btn btn-danger" href="#" role="button">删除</a>
+                        <a class="btn btn-success add-c" href="##" data-name="<%=c.name%>" role="button">添加到正式候选人</a>
+                        <a class="btn btn-danger del-c" href="##" data-name="<%=c.name%>" role="button">删除</a>
                     </td>
                 </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td>Larry</td>
-                    <td>the Bird</td>
-                </tr>
+                <%});%>
             </table>
         </div>
     </div>
+
     <div class="row">
         <div class="panel panel-default">
-            <!-- Default panel contents -->
             <div class="panel-heading">正式候选人</div>
-            <!--<div class="panel-body">-->
-            <!--<p>...</p>-->
-            <!--</div>-->
-            <!-- Table -->
             <table class="table table-bordered table-hover">
                 <tr>
                     <th>序号ID</th>
+                    <th>照片</th>
                     <th>姓名</th>
+                    <th>性别</th>
+                    <th>竞赛宣言</th>
+                    <th>票数</th>
                     <th>操作</th>
                 </tr>
+                <% candidates.forEach(function(c, n){%>
                 <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
+                    <th scope="row"><%= n+1 %></th>
+                    <td><img src="<%= c.avatar %>" alt=""/></td>
+                    <td><%=c.name%></td>
+                    <td><%=c.sex=="male"?"男":"女"%></td>
+                    <td><%=c.description%></td>
+                    <td><%=c.voteNumber%></td>
                     <td>
-                        <a class="btn btn-danger" href="#" role="button">从正式候选人中删除</a>
+                        <a class="btn btn-danger delCandidate" href="##" data-name="<%=c.name%>" role="button">从正式候选人中删除</a>
                     </td>
                 </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td>Larry</td>
-                    <td>the Bird</td>
-                </tr>
+                <%});%>
             </table>
         </div>
     </div>
 </div>
 <script src="js/jquery-1.7.2.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
+<script>
+    $('.delCandidate').click(function(){
+        var name = $(this).data('name');
+        $.post('./admin', {type: "delCandidate", data: {
+            name: name
+        }}).success(function(res){
+            alert(res.info);
+            location.reload();
+        });
+    });
+
+    $('.add-c').click(function(){
+        var name = $(this).data('name');
+        $.post('./admin', {type: "addCandidate", data: {
+            name: name
+        }}).success(function(res){
+            alert(res.info);
+            location.reload();
+        });
+    });
+
+    $('.del-c').click(function(){
+        var name = $(this).data('name');
+        $.post('./admin', {type: "delCpool", data: {
+            name: name
+        }}).success(function(res){
+            alert(res.info);
+            location.reload();
+        });
+    });
+</script>
 </body>
 </html>

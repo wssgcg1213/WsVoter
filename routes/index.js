@@ -14,7 +14,7 @@ router.get('/', function(req, res) {
 
 router.get('/user', user);
 router.get('/screen', screen);
-router.get('/admin', admin);
+router.all('/admin', admin);
 router.get('/login', login);
 router.post('/login', login);
 router.get('/logout', function(req, res){

@@ -1,11 +1,13 @@
 /**
  * Created by Liuchenling on 4/11/15.
  */
+
+
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema,
     ObjectId = Schema.ObjectId;
 
-var candidate = new Schema({
+var cpool = new Schema({
     id: ObjectId,
     name: String,
     voteNumber: Number,
@@ -14,4 +16,4 @@ var candidate = new Schema({
     description: String
 });
 
-module.exports = mongoose.model('candidates', candidate);
+module.exports = mongoose.model('cpool', cpool);

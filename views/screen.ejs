@@ -9,7 +9,7 @@
       <h1>“移动4G”第34届重庆市大学生“校园之春”十大歌手大赛</h1>
       <ul class="voters">
         <% candidates.forEach(function(v) { %>
-        <li class="vote" data-vote="<%=v.id%>">
+        <li class="vote" data-vote="<%=v.name%>">
           <div class="vote-avatar" style="background-image: url('<%= v.avatar %>')"></div>
           <div class="vote-container">
             <div class="vote-top <%= v.sex == 'male' ? 'blue' : 'red'%>"></div>
