@@ -7,6 +7,7 @@ var candidates = require('../models/candidates');
 var votersModel = require('../models/voters');
 var cpool = require('../models/cpool');
 var EventProxy = require('eventproxy');
+var uuid = require('uuid');
 
 module.exports = function(req, res) {
     var ep = EventProxy.create('cpool', 'candidates', 'voter', function(cpool, candidates, voter){
@@ -18,6 +19,13 @@ module.exports = function(req, res) {
             candidates: candidates
         });
     });
+
+    var uniqueid = req.cookies['voter'];
+    if(!uniqueid){
+        uniqueid = uuid.v4();
+        res.cookie('voter', uniqueid);
+    }
+
 
     candidates.find({}, function(err, candidates) {
         if(err) return console.log(err);
@@ -31,10 +39,10 @@ module.exports = function(req, res) {
         ep.emit('cpool', cpool || []);
     });
 
-    votersModel.findOne({uniqueid: req.cookies['voter']}, function(err, voter){
+    votersModel.findOne({uniqueid: uniqueid}, function(err, voter){
         if(!voter || voter.length == 0){ //如果没有找到就新建
             var _v = new votersModel({
-                uniqueid: req.cookies['voter'],
+                uniqueid: uniqueid,
                 record: "[]"
             });
             _v.save(function(err, voter){
