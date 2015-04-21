@@ -62,13 +62,26 @@ module.exports = function (io){
             //todo if(candidates[candidateId]['votedUniqueIds'].indexOf(uniqueid) > -1) return console.log('这个人已经投过了');
             candidatesModel.where({name: candidateName}).update({$inc: {voteNumber: 1}}, function() {
                 votersModel.findOne({uniqueid: obj.uniqueid}, function(err, doc){
-                    var record = JSON.parse(doc.record);
-                    record.push(obj.name);
-                    votersModel.where({uniqueid: obj.uniqueid}).update({record: JSON.stringify(record)}, function(){
-                        candidatesModel.find({}, function(err, docs){
-                            screen.emit('queryReturn', docs);
+                    if(!doc){
+                        var _voter = {
+                            record: JSON.stringify([candidateName]),
+                            uniqueid: uniqueid
+                        };
+                        var _vm = new votersModel(_voter);
+                        _vm.save(function(err){
+                            candidatesModel.find({}, function(err, docs){
+                                screen.emit('queryReturn', docs);
+                            });
                         });
-                    });
+                    }else{
+                        var record = JSON.parse(doc.record);
+                        record.push(obj.name);
+                        votersModel.where({uniqueid: obj.uniqueid}).update({record: JSON.stringify(record)}, function(){
+                            candidatesModel.find({}, function(err, docs){
+                                screen.emit('queryReturn', docs);
+                            });
+                        });
+                    }
                 });
             });
         });
