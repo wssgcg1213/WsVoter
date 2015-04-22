@@ -60,8 +60,15 @@ module.exports = function (io){
                 uniqueid = obj.uniqueid;
             if(!candidateName || !uniqueid) return console.log('没有candidateName或uniqueid');
             //todo if(candidates[candidateId]['votedUniqueIds'].indexOf(uniqueid) > -1) return console.log('这个人已经投过了');
-            candidatesModel.where({name: candidateName}).update({$inc: {voteNumber: 1}}, function() {
+            candidatesModel.where({name: candidateName}).update({$inc: {voteNumber: 1}}, function(err) {
+                if(err) {
+                    console.log('where', err);
+                }
+
                 votersModel.findOne({uniqueid: obj.uniqueid}, function(err, doc){
+                    if(err){
+                        console.log('findOne', err);
+                    }
                     if(!doc){
                         var _voter = {
                             record: JSON.stringify([candidateName]),
@@ -70,6 +77,9 @@ module.exports = function (io){
                         var _vm = new votersModel(_voter);
                         _vm.save(function(err){
                             candidatesModel.find({}, function(err, docs){
+                                if(err) {
+                                    console.log('find', err)
+                                }
                                 screen.emit('queryReturn', docs);
                             });
                         });
@@ -78,6 +88,9 @@ module.exports = function (io){
                         record.push(obj.name);
                         votersModel.where({uniqueid: obj.uniqueid}).update({record: JSON.stringify(record)}, function(){
                             candidatesModel.find({}, function(err, docs){
+                                if(err) {
+                                    console.log('candidateFind', err);
+                                }
                                 screen.emit('queryReturn', docs);
                             });
                         });
