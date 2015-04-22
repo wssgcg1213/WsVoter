@@ -32,20 +32,20 @@ var events = require("events");
 //    });
 //})();
 
-function getScreenData() {
+function getScreenData(cb) {
     candidatesModel.find({}, function(err, docs){
         if(err){
             console.log('findCandidatesErr:', err);
-            return [];
+            return cb && cb([]);
         }
         if(docs.map)
-            return docs.map(function(v){
+            cb && cb(docs.map(function(v){
                 return {
                     name: v.name,
                     voteNumber: v.voteNumber
                 };
-            });
-        else return [];
+            }));
+        else return cb && cb([]);
     });
 }
 
@@ -60,10 +60,14 @@ module.exports = function (io){
             socket.emit('init', docs);
         });
         socket.on('query', function() {
-            socket.emit('queryReturn', getScreenData);
+            getScreenData(function(data){
+                socket.emit('queryReturn', data);
+            });
         });
         setInterval(function() {
-            socket.emit('queryReturn', getScreenData);
+            getScreenData(function(data){
+                socket.emit('queryReturn', data);
+            });
         }, 3000);
     });
 
