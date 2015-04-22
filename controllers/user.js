@@ -9,7 +9,7 @@ var votersModel = require('../models/voters');
 var cpool = require('../models/cpool');
 var EventProxy = require('eventproxy');
 var uuid = require('uuid');
-var updateScreen = require('./io').updateScreen;
+
 
 function postHandler(req, res) {
     var candidateName = req.body.name,

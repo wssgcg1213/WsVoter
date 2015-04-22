@@ -32,18 +32,16 @@ var events = require("events");
 //    });
 //})();
 
-var __screen__;
-
 
 module.exports = function (io){
     var screen = io.of('/screen'),
         user = io.of('/user');
 
     //todo 以下screen部分
+
     screen.on('connect', function(socket) {
         console.log('screen connected!');
-
-        __screen__ = socket;//exposed to global
+        screen.emit('123', 123);
         candidatesModel.find({}, function(err, docs){
             socket.emit('init', docs);
         });
@@ -106,12 +104,3 @@ module.exports = function (io){
     });
 
 };
-
-
-module.exports.updateScreen = function() {
-    if(__screen__){
-        candidatesModel.find({}, function(err, docs){
-            __screen__.emit('queryReturn', docs);
-        });
-    }
-}
