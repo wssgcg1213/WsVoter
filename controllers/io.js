@@ -33,13 +33,7 @@ var events = require("events");
 //})();
 
 var __screen__;
-exports.updateScreen = function() {
-    if(__screen__){
-        candidatesModel.find({}, function(err, docs){
-            socket.emit('queryReturn', docs);
-        });
-    }
-}
+
 
 module.exports = function (io){
     var screen = io.of('/screen'),
@@ -112,3 +106,12 @@ module.exports = function (io){
     });
 
 };
+
+
+module.exports.updateScreen = function() {
+    if(__screen__){
+        candidatesModel.find({}, function(err, docs){
+            __screen__.emit('queryReturn', docs);
+        });
+    }
+}

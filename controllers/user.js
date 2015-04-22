@@ -56,7 +56,7 @@ function postHandler(req, res) {
 
 module.exports = function(req, res) {
     if(req.method.toUpperCase() == 'POST'){
-        postHandler.apply(this, arguments);
+        return postHandler.apply(this, arguments);
     }
     var ep = EventProxy.create('cpool', 'candidates', 'voter', function(cpool, candidates, voter){
         //console.log(voter);
