@@ -51,10 +51,15 @@ module.exports = function (io){
 
 
     //todo 以下用户部分
+    var _user = 0;
     user.on('connection', function(socket) {
+        console.log('nowUser:', ++_user);
         candidatesModel.find({}, function(err, docs){
             socket.emit('init', docs);
         });
+        //socket.on('disconnect', function(){
+        //    console.log('disconnect, nowUser:', --_user);
+        //});
         socket.on('vote', function(obj) {
             var candidateName = obj.name,
                 uniqueid = obj.uniqueid;
