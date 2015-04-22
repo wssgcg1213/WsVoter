@@ -30,7 +30,6 @@ function postHandler(req, res) {
                 };
                 var _vm = new votersModel(_voter);
                 return _vm.save(function(err){
-                    updateScreen();
                     return res.json({
                         info: "ok"
                     });
@@ -39,7 +38,6 @@ function postHandler(req, res) {
                 var record = JSON.parse(doc.record);
                 record.push(candidateName);
                 return votersModel.where({uniqueid: uniqueid}).update({record: JSON.stringify(record)}, function(){
-                    updateScreen();
                     return res.json({
                         info: "ok"
                     });

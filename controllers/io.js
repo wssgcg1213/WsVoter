@@ -41,7 +41,6 @@ module.exports = function (io){
 
     screen.on('connect', function(socket) {
         console.log('screen connected!');
-        screen.emit('123', 123);
         candidatesModel.find({}, function(err, docs){
             socket.emit('init', docs);
         });
@@ -50,6 +49,11 @@ module.exports = function (io){
                 socket.emit('queryReturn', docs);
             });
         });
+        setInterval(function() {
+            candidatesModel.find({}, function(err, docs){
+                socket.emit('queryReturn', docs);
+            });
+        }, 3000);
     });
 
 
