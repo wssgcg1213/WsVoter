@@ -32,79 +32,89 @@ var events = require("events");
 //    });
 //})();
 
+function getScreenData() {
+    candidatesModel.find({}, function(err, docs){
+        if(err){
+            console.log('findCandidatesErr:', err);
+            return [];
+        }
+        if(docs.map)
+            return docs.map(function(v){
+                return {
+                    name: v.name,
+                    voteNumber: v.voteNumber
+                };
+            });
+        else return [];
+    });
+}
 
 module.exports = function (io){
     var screen = io.of('/screen'),
         user = io.of('/user');
 
     //todo 以下screen部分
-
     screen.on('connect', function(socket) {
         console.log('screen connected!');
         candidatesModel.find({}, function(err, docs){
             socket.emit('init', docs);
         });
         socket.on('query', function() {
-            candidatesModel.find({}, function(err, docs){
-                socket.emit('queryReturn', docs);
-            });
+            socket.emit('queryReturn', getScreenData);
         });
         setInterval(function() {
-            candidatesModel.find({}, function(err, docs){
-                socket.emit('queryReturn', docs);
-            });
+            socket.emit('queryReturn', getScreenData);
         }, 3000);
     });
 
 
     //todo 以下用户部分
-    user.on('connection', function(socket) {
-        candidatesModel.find({}, function(err, docs){
-            socket.emit('init', docs);
-        });
-        socket.on('vote', function(obj) {
-            var candidateName = obj.name,
-                uniqueid = obj.uniqueid;
-            if(!candidateName || !uniqueid) return console.log('没有candidateName或uniqueid');
-            //todo if(candidates[candidateId]['votedUniqueIds'].indexOf(uniqueid) > -1) return console.log('这个人已经投过了');
-            candidatesModel.where({name: candidateName}).update({$inc: {voteNumber: 1}}, function(err) {
-                if(err) {
-                    console.log('where', err);
-                }
-
-                votersModel.findOne({uniqueid: obj.uniqueid}, function(err, doc){
-                    if(err){
-                        console.log('findOne', err);
-                    }
-                    if(!doc){
-                        var _voter = {
-                            record: JSON.stringify([candidateName]),
-                            uniqueid: uniqueid
-                        };
-                        var _vm = new votersModel(_voter);
-                        _vm.save(function(err){
-                            candidatesModel.find({}, function(err, docs){
-                                if(err) {
-                                    console.log('find', err)
-                                }
-                                screen.emit('queryReturn', docs);
-                            });
-                        });
-                    }else{
-                        var record = JSON.parse(doc.record);
-                        record.push(obj.name);
-                        votersModel.where({uniqueid: obj.uniqueid}).update({record: JSON.stringify(record)}, function(){
-                            candidatesModel.find({}, function(err, docs){
-                                if(err) {
-                                    console.log('candidateFind', err);
-                                }
-                                screen.emit('queryReturn', docs);
-                            });
-                        });
-                    }
-                });
-            });
-        });
-    });
+    //user.on('connection', function(socket) {
+    //    candidatesModel.find({}, function(err, docs){
+    //        socket.emit('init', docs);
+    //    });
+    //    socket.on('vote', function(obj) {
+    //        var candidateName = obj.name,
+    //            uniqueid = obj.uniqueid;
+    //        if(!candidateName || !uniqueid) return console.log('没有candidateName或uniqueid');
+    //        candidatesModel.where({name: candidateName}).update({$inc: {voteNumber: 1}}, function(err) {
+    //            if(err) {
+    //                console.log('where', err);
+    //            }
+    //
+    //            votersModel.findOne({uniqueid: obj.uniqueid}, function(err, doc){
+    //                if(err){
+    //                    console.log('findOne', err);
+    //                }
+    //                if(!doc){
+    //                    var _voter = {
+    //                        record: JSON.stringify([candidateName]),
+    //                        uniqueid: uniqueid
+    //                    };
+    //                    var _vm = new votersModel(_voter);
+    //                    _vm.save(function(err){
+    //                        candidatesModel.find({}, function(err, docs){
+    //                            if(err) {
+    //                                console.log('find', err)
+    //                            }
+    //                            screen.emit('queryReturn', docs);
+    //                        });
+    //                    });
+    //                }else{
+    //                    var record = JSON.parse(doc.record);
+    //                    record.push(obj.name);
+    //                    votersModel.where({uniqueid: obj.uniqueid}).update({record: JSON.stringify(record)}, function(){
+    //                        candidatesModel.find({}, function(err, docs){
+    //                            if(err) {
+    //                                console.log('candidateFind', err);
+    //                            }
+    //                            screen.emit('queryReturn', docs);
+    //                        });
+    //                    });
+    //                }
+    //            });
+    //        });
+    //    });
+    //});
 
 };
