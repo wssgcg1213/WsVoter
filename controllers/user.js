@@ -19,7 +19,7 @@ function postHandler(req, res) {
         if(err) {
             console.log('where', err);
         }
-        votersModel.findOne({uniqueid: obj.uniqueid}, function(err, doc){
+        votersModel.findOne({uniqueid: uniqueid}, function(err, doc){
             if(err){
                 console.log('findOne', err);
             }
@@ -37,8 +37,8 @@ function postHandler(req, res) {
                 });
             }else{
                 var record = JSON.parse(doc.record);
-                record.push(obj.name);
-                return votersModel.where({uniqueid: obj.uniqueid}).update({record: JSON.stringify(record)}, function(){
+                record.push(candidateName);
+                return votersModel.where({uniqueid: uniqueid}).update({record: JSON.stringify(record)}, function(){
                     updateScreen();
                     return res.json({
                         info: "ok"
