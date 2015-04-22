@@ -3,13 +3,13 @@
  */
 console.log('load user.js');
 
-var socket = io(location.origin + '/user', { path : "/wsvoter/sio" });
+//var socket = io(location.origin + '/user', { path : "/wsvoter/sio" });
 
-var connected = false;
-socket.on('connect', function() {
-    if(connected) return console.log('再次连接上');
-    connected = true;
-    console.log('连上去了');
+//var connected = false;
+//socket.on('connect', function() {
+//    if(connected) return console.log('再次连接上');
+//    connected = true;
+//    console.log('连上去了');
 
     var uniqueid = getCookie("voter") || (function(){
             var id = createUniqueId(20);
@@ -32,39 +32,44 @@ socket.on('connect', function() {
         $num.text(++preCount + '票');
         voteCount++;
 
-        socket.emit('vote', {
-            name: name, //识别candidate
-            uniqueid: uniqueid //识别投票者
+        //socket.emit('vote', {
+        //    name: name, //识别candidate
+        //    uniqueid: uniqueid //识别投票者
+        //});
+        $.post(location.href, {
+            name: name,
+            uniqueid: uniqueid
+        }).success(function(res){
+            console.log(res);
+            $(this).off('click', btnHandler);
         });
-
-        //todo $(this).off('click', btnHandler);
     }
-});
+//});
 
-
-/**
- * 接收到die指令的时候 断开连接
- */
-socket.on('die', function(){
-    socket.disconnect();
-});
-
-/**
- * Log
- */
-socket.on('disconnect', function(){
-    console.log('died');
-})
-
-socket.on('voteReturn', function(obj) {
-   console.log('voteReturn', obj);
-});
-socket.on('queryReturn', function(obj) {
-    console.log('queryReturn:', obj);
-});
-socket.on('init', function(obj) {
-    console.log('init:', obj);
-});
+//
+///**
+// * 接收到die指令的时候 断开连接
+// */
+//socket.on('die', function(){
+//    socket.disconnect();
+//});
+//
+///**
+// * Log
+// */
+//socket.on('disconnect', function(){
+//    console.log('died');
+//})
+//
+//socket.on('voteReturn', function(obj) {
+//   console.log('voteReturn', obj);
+//});
+//socket.on('queryReturn', function(obj) {
+//    console.log('queryReturn:', obj);
+//});
+//socket.on('init', function(obj) {
+//    console.log('init:', obj);
+//});
 
 
 

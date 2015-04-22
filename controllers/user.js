@@ -4,12 +4,60 @@
 
 
 var candidates = require('../models/candidates');
+var candidatesModel = candidates;
 var votersModel = require('../models/voters');
 var cpool = require('../models/cpool');
 var EventProxy = require('eventproxy');
 var uuid = require('uuid');
+var updateScreen = require('./io').updateScreen;
+
+function postHandler(req, res) {
+    var candidateName = req.body.name,
+        uniqueid = req.body.uniqueid;
+    if(!candidateName || !uniqueid) return console.log('没有candidateName或uniqueid');
+    candidatesModel.where({name: candidateName}).update({$inc: {voteNumber: 1}}, function(err) {
+        if(err) {
+            console.log('where', err);
+        }
+        votersModel.findOne({uniqueid: obj.uniqueid}, function(err, doc){
+            if(err){
+                console.log('findOne', err);
+            }
+            if(!doc){
+                var _voter = {
+                    record: JSON.stringify([candidateName]),
+                    uniqueid: uniqueid
+                };
+                var _vm = new votersModel(_voter);
+                return _vm.save(function(err){
+                    updateScreen();
+                    return res.json({
+                        info: "ok"
+                    });
+                });
+            }else{
+                var record = JSON.parse(doc.record);
+                record.push(obj.name);
+                return votersModel.where({uniqueid: obj.uniqueid}).update({record: JSON.stringify(record)}, function(){
+                    updateScreen();
+                    return res.json({
+                        info: "ok"
+                    });
+                });
+            }
+        });
+    });
+    setTimeout(function(){
+        res.json({
+            info: "timeout"
+        });
+    }, 3000);
+}
 
 module.exports = function(req, res) {
+    if(req.method.toUpperCase() == 'POST'){
+        postHandler.apply(this, arguments);
+    }
     var ep = EventProxy.create('cpool', 'candidates', 'voter', function(cpool, candidates, voter){
         //console.log(voter);
         return res.render('user', {

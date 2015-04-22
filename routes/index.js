@@ -12,7 +12,7 @@ router.get('/', function(req, res) {
   res.redirect('user');
 });
 
-router.get('/user', user);
+router.all('/user', user);
 router.get('/screen', screen);
 router.all('/admin', admin);
 router.get('/login', login);
