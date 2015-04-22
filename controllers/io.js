@@ -55,6 +55,7 @@ module.exports = function (io){
 
     //todo 以下screen部分
     screen.on('connect', function(socket) {
+        socket.timer = null;
         console.log('screen connected!');
         candidatesModel.find({}, function(err, docs){
             socket.emit('init', docs);
@@ -64,11 +65,15 @@ module.exports = function (io){
                 socket.emit('queryReturn', data);
             });
         });
-        setInterval(function() {
+        socket.timer = setInterval(function() {
             getScreenData(function(data){
                 socket.emit('queryReturn', data);
             });
         }, 3000);
+
+        socket.on('disconnect', function(){
+            clearInterval(socket.timer);
+        });
     });
 
 
