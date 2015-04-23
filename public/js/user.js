@@ -17,62 +17,35 @@ console.log('load user.js');
             return id;
         })();//创建用户识别码 存COOKIE
 
-    var voteCount = 0; //已经投过的计数
+    //var voteCount = 0; //已经投过的计数
     $('.vote-btn').on('click', btnHandler);
+
     function btnHandler(e){
         var $this = $(this);
-        var name = $this.parents('li').data('name');
-        if($this.parents('li').data('voted')) return;
-        $this.parents('li').data('voted', 'yes');
-        console.log('name', name);
-        $this.find('.love').html('&#xe62f;');
-        $this.find('span').text('已投!');
-        var $num = $this.parent().find('.vote-number')
-        var preCount = parseInt($num.text()) || 0;
-        $num.text(++preCount + '票');
-        voteCount++;
-
-        //socket.emit('vote', {
-        //    name: name, //识别candidate
-        //    uniqueid: uniqueid //识别投票者
-        //});
+        $(this).off('click', btnHandler);
         $.post(location.href, {
             name: name,
             uniqueid: uniqueid
         }, function(res){
             if(res && res.info){
                 alert(res.info == 'ok' ? "投票成功" : res.info);
+                if(res.info == "ok"){
+                    var name = $this.parents('li').data('name');
+                    if($this.parents('li').data('voted')) return;
+                    $this.parents('li').data('voted', 'yes');
+                    $this.find('.love').html('&#xe62f;');
+                    $this.find('span').text('已投!');
+                    //var $num = $this.parent().find('.vote-number')
+                    //var preCount = parseInt($num.text()) || 0;
+                    //$num.text(++preCount + '票');
+                    //voteCount++;
+                }else{
+                    $(this).on('click', btnHandler); //投票失败了 重新加上
+                }
             }
-            $(this).off('click', btnHandler);
         });
     }
 //});
-
-//
-///**
-// * 接收到die指令的时候 断开连接
-// */
-//socket.on('die', function(){
-//    socket.disconnect();
-//});
-//
-///**
-// * Log
-// */
-//socket.on('disconnect', function(){
-//    console.log('died');
-//})
-//
-//socket.on('voteReturn', function(obj) {
-//   console.log('voteReturn', obj);
-//});
-//socket.on('queryReturn', function(obj) {
-//    console.log('queryReturn:', obj);
-//});
-//socket.on('init', function(obj) {
-//    console.log('init:', obj);
-//});
-
 
 
 /**
