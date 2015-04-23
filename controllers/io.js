@@ -48,6 +48,22 @@ function getScreenData(cb) {
         else return cb && cb([]);
     });
 }
+var oldData = [];
+/**
+ * 深copy比较数据
+ * @returns {boolean}true是未改变
+ */
+function compareData(newData, oldData) {
+    try{
+        for(var i = 0, len = newData.length; i < len; i++){
+            if(oldData[i].name !== newData[i].name || oldData[i].voteNumber !== newData[i].voteNumber)
+                return false;
+        }
+    }catch(e){
+        return false;
+    }
+    return true;
+}
 
 module.exports = function (io){
     var screen = io.of('/screen'),
@@ -67,9 +83,11 @@ module.exports = function (io){
         });
         socket.timer = setInterval(function() {
             getScreenData(function(data){
-                socket.emit('queryReturn', data);
+                if(!compareData(data, oldData)){
+                    socket.emit('queryReturn', data);
+                }
             });
-        }, 3000);
+        }, 2000); //默认刷新时长
 
         socket.on('disconnect', function(){
             clearInterval(socket.timer);
@@ -77,7 +95,7 @@ module.exports = function (io){
     });
 
 
-    //todo 以下用户部分
+    //todo 以下用户部分 交给ajax了
     //user.on('connection', function(socket) {
     //    candidatesModel.find({}, function(err, docs){
     //        socket.emit('init', docs);
