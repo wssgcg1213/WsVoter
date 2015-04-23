@@ -84,7 +84,6 @@ module.exports = function (io){
         socket.timer = setInterval(function() {
             getScreenData(function(data){
                 var c = compareData(data, oldData);
-                console.log("c", c);
                 if(!c){//如果改变
                     oldData = data;
                     screen.emit('queryReturn', data); //broadcast
