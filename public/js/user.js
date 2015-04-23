@@ -39,8 +39,10 @@ console.log('load user.js');
         $.post(location.href, {
             name: name,
             uniqueid: uniqueid
-        }).success(function(res){
-            console.log(res);
+        }, function(res){
+            if(res && res.info){
+                alert(res.info == 'ok' ? "投票成功" : res.info);
+            }
             $(this).off('click', btnHandler);
         });
     }

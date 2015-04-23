@@ -9,6 +9,7 @@ var votersModel = require('../models/voters');
 var cpool = require('../models/cpool');
 var EventProxy = require('eventproxy');
 var uuid = require('uuid');
+var voteLimit = require('../config').voteLimit;
 
 
 function postHandler(req, res) {
@@ -36,6 +37,11 @@ function postHandler(req, res) {
                 });
             }else{
                 var record = JSON.parse(doc.record);
+                if(record.length > voteLimit){
+                    return res.json({
+                        info: "最多只能投" + voteLimit + "票"
+                    });
+                }
                 record.push(candidateName);
                 return votersModel.where({uniqueid: uniqueid}).update({record: JSON.stringify(record)}, function(){
                     return res.json({
