@@ -87,7 +87,7 @@ module.exports = function (io){
                 console.log("c", c);
                 if(!c){//如果改变
                     oldData = data;
-                    socket.emit('queryReturn', data);
+                    screen.emit('queryReturn', data); //broadcast
                 }
             });
         }, 2000); //默认刷新时长
