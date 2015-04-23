@@ -23,6 +23,9 @@ console.log('load user.js');
     function btnHandler(e){
         var $this = $(this);
         $(this).off('click', btnHandler);
+
+        var name = $this.parents('li').data('name');
+        if($this.parents('li').data('voted')) return;
         $.post(location.href, {
             name: name,
             uniqueid: uniqueid
@@ -30,15 +33,9 @@ console.log('load user.js');
             if(res && res.info){
                 alert(res.info == 'ok' ? "投票成功" : res.info);
                 if(res.info == "ok"){
-                    var name = $this.parents('li').data('name');
-                    if($this.parents('li').data('voted')) return;
                     $this.parents('li').data('voted', 'yes');
                     $this.find('.love').html('&#xe62f;');
                     $this.find('span').text('已投!');
-                    //var $num = $this.parent().find('.vote-number')
-                    //var preCount = parseInt($num.text()) || 0;
-                    //$num.text(++preCount + '票');
-                    //voteCount++;
                 }else{
                     $this.on('click', btnHandler); //投票失败了 重新加上
                 }
