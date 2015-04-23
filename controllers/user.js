@@ -37,7 +37,7 @@ function postHandler(req, res) {
                 });
             }else{
                 var record = JSON.parse(doc.record);
-                if(record.length > voteLimit){
+                if(record.length >= voteLimit){
                     return res.json({
                         info: "最多只能投" + voteLimit + "票"
                     });
