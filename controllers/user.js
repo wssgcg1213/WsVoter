@@ -15,7 +15,12 @@ var voteLimit = require('../config').voteLimit;
 function postHandler(req, res) {
     var candidateName = req.body.name,
         uniqueid = req.body.uniqueid;
-    if(!candidateName || !uniqueid) return console.log('没有candidateName或uniqueid');
+    if(!candidateName || !uniqueid) {
+        console.log('没有candidateName或uniqueid');
+        return res.json({
+            info: "invalid vote!"
+        });
+    }
     candidatesModel.where({name: candidateName}).update({$inc: {voteNumber: 1}}, function(err) {
         if(err) {
             console.log('where', err);

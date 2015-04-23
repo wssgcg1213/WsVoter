@@ -40,7 +40,7 @@ console.log('load user.js');
                     //$num.text(++preCount + '票');
                     //voteCount++;
                 }else{
-                    $(this).on('click', btnHandler); //投票失败了 重新加上
+                    $this.on('click', btnHandler); //投票失败了 重新加上
                 }
             }
         });
