@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>投票验证</title>
+    <link rel="stylesheet" href="style/user.css"/>
+</head>
+<body>
+<div class="flow">
+    <div class="top100 center">
+        <input type="tel" placeholder="请输入6位验证码" id="vcode"/>
+    </div>
+    <div class="center">
+        <button class="submit">确定</button>
+    </div>
+</div>
+
+<script src="js/zepto-1.1.4.min.js"></script>
+<script>
+    $('.submit').click(function(){
+        var _vcode = $('#vcode').val();
+        $.post('/wsvoter/verify', {vcode: _vcode}, function(res){
+            if(res && res.status == 200){
+                location = '/wsvoter/user?uniqueid=' + _vcode;
+            }else{
+                alert('请检查您的验证码!');
+            }
+        });
+    })
+</script>
+</body>
+</html>

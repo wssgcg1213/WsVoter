@@ -550,3 +550,43 @@ li .love {
   color: #F4747A;
   font-size: 26px;
 }
+.flow {
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #fff;
+  opacity: 1;
+}
+.flow.hidden {
+  opacity: 0;
+  display: none;
+}
+.flow .top100 {
+  margin-top: 100px;
+}
+.flow .center {
+  text-align: center;
+}
+.flow #vcode {
+  width: 80%;
+  border: 1px solid #DDD;
+  border-radius: 8px;
+  padding: 5px;
+  outline: none;
+  -webkit-appearance: none;
+  text-align: center;
+}
+.flow .submit {
+  width: 100px;
+  background-color: #e31e09;
+  height: 40px;
+  outline: none;
+  -webkit-appearance: none;
+  margin-top: 20px;
+  border: none;
+  border-radius: 4px;
+  color: #FFF;
+}

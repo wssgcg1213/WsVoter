@@ -86,7 +86,7 @@ module.exports = function (io){
                 var c = compareData(data, oldData);
                 if(!c){//如果改变
                     oldData = data;
-                    screen.emit('queryReturn', data); //broadcast
+                    screen.emit('queryReturn',   data); //broadcast
                 }
             });
         }, 2000); //默认刷新时长

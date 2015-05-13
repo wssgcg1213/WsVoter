@@ -9,6 +9,7 @@ body{
   overflow: hidden;
 }
 .contaniner{
+  overflow: hidden;
   margin: 0 auto;
   width: 100%;
   height: 100%;
@@ -35,17 +36,18 @@ body{
 
   .voters{
     position: absolute;
-    height: 80%;
+    height: 100%;
     margin: 20px auto 0;
     left: 0;
     right: 0;
     bottom: 0;
+    top:0;
     .clearfix();
   }
 
   .vote{
     float: left;
-    width: 100/6%;
+    width: 100/8%;
     height: 50%;
     .vote-avatar{
       width: 58px;
@@ -57,6 +59,8 @@ body{
       margin: 0 auto 10px;
     }
     .vote-container{
+      transform: scaleX(2); //....
+
       .img-replace('../img/votebar.png');
       width: 48px;
       height: 166px;
@@ -102,16 +106,19 @@ body{
     }
     .vote-number{
       text-align: center;
-      color: #FFF;
+      color: #ED2B2B;
       margin: 5px 0 10px;
-      font-size: 18px;
+      font-size: 48px;
     }
     .vote-name{
       text-align: center;
-      color: #FFF;
+      color: #ED2B2B;
       margin: 10px 0 40px;
-      font-size: 18px;
+//      font-size: 48px;
+      font-size: 31px;
+      white-space: nowrap;
     }
+
   }
 }
 
