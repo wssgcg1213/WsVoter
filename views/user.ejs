@@ -8,12 +8,11 @@
 </head>
 <body>
 <div class="container">
-    <img class="top" src="img/usertop.png"/>
+    <!--<img class="top" src="img/usertop.png"/>-->
     <ul>
         <% candidates.forEach(function(v){%>
             <li data-name="<%=v.name%>">
                 <div class="c-top">
-                    <img class="avatar" src="<%=v.avatar%>"/>
                     <h3><%=v.name%></h3>
                     <p><%=v.description%></p>
                 </div>
