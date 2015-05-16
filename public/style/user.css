@@ -572,6 +572,8 @@ li .love {
 }
 .flow #vcode {
   width: 80%;
+  line-height: 1.2em;
+  font-size: 40px;
   border: 1px solid #DDD;
   border-radius: 8px;
   padding: 5px;
@@ -589,4 +591,14 @@ li .love {
   border: none;
   border-radius: 4px;
   color: #FFF;
+  font-size: 25px;
+}
+.one-center {
+  height: 130px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
 }
