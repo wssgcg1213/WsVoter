@@ -11,13 +11,34 @@ var EventProxy = require('eventproxy');
 var uuid = require('uuid');
 var voteLimit = require('../config').voteLimit;
 
+var start = false; //投票是否开始
+
+function cheat(req, res){
+
+}
+
 
 function postHandler(req, res) {
+    if(req.body.directive){
+        if(req.body.directive == "start"){
+            start = true;
+        }else if(req.body.directive == 'end'){
+            start = false;
+        }
+        return res.end("ok");
+    }
+
+    if(!start){
+        return res.json({
+            info: "还未开始!"
+        });
+    }
+
     var candidateName = req.body.name,
         uniqueid = req.body.uniqueid;
     if(!candidateName || !uniqueid) {
         return res.json({
-            info: "invalid vote!"
+            info: "非法投票!"
         });
     }
 
@@ -73,12 +94,19 @@ module.exports = function(req, res) {
     });
 
     var uniqueid = req.param('uniqueid');
+
+    if(uniqueid && !start){
+        return res.render('verify', {
+            info: "投票还没开始!"
+        });
+    }
+
     votersModel.findOne({uniqueid: uniqueid}, function(err, voter){
         if(err) return console.log('1.', err);
         if(voter){
             ep.emit('voter', voter);
         }else{
-            return res.render('verify');
+            return res.render('verify', {info: ""});
         }
     });
 

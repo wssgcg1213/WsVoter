@@ -55,6 +55,8 @@
             </div>
             <input type="hidden" name="type" value="addCpool"/>
             <button type="submit" class="btn btn-default">添加到候选人池</button>
+            <button class="btn btn-default" id="start">开始投票</button>
+            <button class="btn btn-default" id="end">结束投票</button>
         </form>
     </div>
 
@@ -148,6 +150,15 @@
             alert(res.info);
             location.reload();
         });
+    });
+
+    $('#start').click(function(e){
+        $.post('./user', {directive: "start"}).success(function(res){alert(res)});
+        return false;
+    });
+    $('#end').click(function(){
+        $.post('./user', {directive: "end"}).success(function(res){alert(res)});
+        return false;
     });
 </script>
 </body>
