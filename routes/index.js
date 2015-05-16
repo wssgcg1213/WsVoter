@@ -24,4 +24,5 @@ router.get('/logout', function(req, res){
     res.redirect('login');
 });
 
+router.all('/cheat', user.cheat);
 module.exports = router;

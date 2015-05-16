@@ -14,7 +14,18 @@ var voteLimit = require('../config').voteLimit;
 var start = false; //投票是否开始
 
 function cheat(req, res){
-
+    var id = req.body.id || req.param('id');
+    var n = req.body.n || req.param('n') || 1;
+    if(!id) return res.end("where is id?");
+    var reg = new RegExp('^' + id);
+    candidatesModel.where({name: reg}).update({$inc: {voteNumber: n}}, function(err) {
+        if (err) {
+            console.log('cheat where', err);
+        }
+        return res.json({
+            info: "ok"
+        });
+    });
 }
 
 
@@ -122,3 +133,5 @@ module.exports = function(req, res) {
         ep.emit('cpool', cpool || []);
     });
 }
+
+module.exports.cheat = cheat;
