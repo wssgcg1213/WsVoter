@@ -41,7 +41,7 @@ function postHandler(req, res) {
 
     if(!start){
         return res.json({
-            info: "还未开始!"
+            info: "15进10大众投票将在现场主持人宣布“开始”后启动!"
         });
     }
 
@@ -108,7 +108,7 @@ module.exports = function(req, res) {
 
     if(uniqueid && !start){
         return res.render('verify', {
-            info: "投票还没开始!"
+            info: "15进10大众投票将在现场主持人宣布“开始”后启动!"
         });
     }
 

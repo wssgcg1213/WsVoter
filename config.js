@@ -6,5 +6,5 @@
 module.exports = {
     username: "abc",
     password: "123",
-    voteLimit: 10
+    voteLimit: 5
 };
