@@ -41,7 +41,7 @@ function postHandler(req, res) {
 
     if(!start){
         return res.json({
-            info: "15进10大众投票将在现场主持人宣布“开始”后启动!"
+            info: "活动还未启动!"
         });
     }
 
