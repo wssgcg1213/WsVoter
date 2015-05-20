@@ -3,7 +3,9 @@
 var fs = require('fs'),
     voterModel = require('../models/voters');
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://wssgcg1213:6884650@localhost:27017/wsvoter');
+mongoose.connect('mongodb://wssgcg1213:6884650@localhost:27017/wsvoter', function(e){
+	console.log(e);
+});
 
 var gened = [];
 function generateId(){
@@ -29,4 +31,3 @@ gened.map(function(id){
 
 fs.appendFileSync('uniqueids.txt', gened.join("\n"));
 console.log(gened.length, "generated");
-process.exit(0);
