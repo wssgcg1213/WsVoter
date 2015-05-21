@@ -50,3 +50,8 @@ $(function() {
         $v.find('.vote-bottom').css('height', initHeight + initNumber +'px');
     });
 });
+
+
+$(function(){
+   $('.vote').slice(8).find('.vote-name').css("color", "#FFFC00");
+});
