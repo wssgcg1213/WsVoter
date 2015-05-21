@@ -593,6 +593,6 @@ body {
   text-align: center;
   color: #ED2B2B;
   margin: 10px 0 40px;
-  font-size: 24px;
-  white-space: nowrap;
+  font-size: 22px;
+  white-space: pre-line;
 }
